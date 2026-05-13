@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutGrid, UtensilsCrossed, QrCode, Settings, LogOut } from 'lucide-react'
+import { LayoutGrid, UtensilsCrossed, QrCode, Settings, LogOut, Receipt } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ const NAV = [
   { href: '/dashboard/menu', label: 'Menú', icon: UtensilsCrossed },
   { href: '/dashboard/mesas', label: 'Mesas', icon: QrCode },
   { href: '/dashboard/cocina', label: 'Cocina', icon: LayoutGrid },
+  { href: '/dashboard/caja', label: 'Caja', icon: Receipt },
   { href: '/dashboard/ajustes', label: 'Ajustes', icon: Settings },
 ]
 

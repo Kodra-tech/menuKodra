@@ -29,16 +29,17 @@ export default async function MenuPage({ params }: Props) {
 
   if (!table) notFound()
 
-  // Sesión activa o nueva
+  // Sesión activa o en proceso de pago; si está cerrada, crea una nueva
   const { data: existingSession } = await supabase
     .from('table_sessions')
     .select('id, status')
     .eq('table_id', table.id)
     .eq('restaurant_id', restaurant.id)
-    .eq('status', 'active')
+    .in('status', ['active', 'paying'])
     .maybeSingle()
 
   let sessionId = existingSession?.id
+  let sessionStatus = existingSession?.status ?? 'active'
 
   if (!sessionId) {
     const { data: newSession } = await supabase
@@ -48,6 +49,7 @@ export default async function MenuPage({ params }: Props) {
       .single()
 
     sessionId = newSession?.id
+    sessionStatus = 'active'
   }
 
   if (!sessionId) {
@@ -90,6 +92,7 @@ export default async function MenuPage({ params }: Props) {
       restaurant={restaurant}
       table={table}
       sessionId={sessionId}
+      sessionStatus={sessionStatus}
       categories={categoriesWithItems}
     />
   )

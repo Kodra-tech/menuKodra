@@ -18,6 +18,16 @@ export default async function CocinaPage({ params }: Props) {
 
   if (!restaurant) notFound()
 
+  // Mesas del restaurante para el lookup
+  const { data: tablesData } = await supabase
+    .from('tables')
+    .select('id, number, label')
+    .eq('restaurant_id', restaurantId)
+
+  const tablesMap = Object.fromEntries(
+    (tablesData ?? []).map((t) => [t.id, { number: t.number, label: t.label }]),
+  )
+
   // Órdenes activas (received + preparing)
   const { data: orders } = await supabase
     .from('orders')
@@ -47,6 +57,7 @@ export default async function CocinaPage({ params }: Props) {
         <KitchenBoard
           restaurantId={restaurantId}
           initialOrders={(orders ?? []) as Parameters<typeof KitchenBoard>[0]['initialOrders']}
+          tablesMap={tablesMap}
         />
       </main>
     </div>
