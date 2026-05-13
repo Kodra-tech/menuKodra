@@ -62,7 +62,9 @@ export function useRealtimeOrders(restaurantId: string, initialOrders: KitchenOr
           }
         },
       )
-      .subscribe()
+      .subscribe((status, err) => {
+        console.log('[Realtime Kitchen] status:', status, err ?? '')
+      })
 
     return () => {
       supabase.removeChannel(channel)
