@@ -6,6 +6,7 @@ import { useCartStore } from '@/stores/cart-store'
 import { CategoryTabs } from './category-tabs'
 import { CartDrawer } from './cart-drawer'
 import { CartButton } from './cart-button'
+import { SessionActions } from './session-actions'
 import { Toaster } from '@/components/ui/sonner'
 
 type ModifierOption = {
@@ -68,10 +69,11 @@ interface Props {
   restaurant: Restaurant
   table: Table
   sessionId: string
+  sessionStatus: string
   categories: Category[]
 }
 
-export function MenuView({ restaurant, table, sessionId, categories }: Props) {
+export function MenuView({ restaurant, table, sessionId, sessionStatus, categories }: Props) {
   const initSession = useCartStore((s) => s.initSession)
 
   useEffect(() => {
@@ -114,6 +116,12 @@ export function MenuView({ restaurant, table, sessionId, categories }: Props) {
       {/* Contenido principal */}
       <main className="flex-1 max-w-2xl mx-auto w-full pb-28">
         <CategoryTabs categories={categories} currency={restaurant.currency ?? 'MXN'} />
+        <SessionActions
+          sessionId={sessionId}
+          restaurantId={restaurant.id}
+          tableId={table.id}
+          sessionStatus={sessionStatus}
+        />
       </main>
 
       {/* Carrito flotante */}
