@@ -8,9 +8,12 @@ import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { useRealtimeOrders, type KitchenOrder } from '@/hooks/use-realtime-orders'
 
+type TableInfo = { number: number; label: string | null }
+
 interface Props {
   restaurantId: string
   initialOrders: KitchenOrder[]
+  tablesMap: Record<string, TableInfo>
 }
 
 const STATUS_CONFIG = {
@@ -38,7 +41,7 @@ function timeAgo(dateStr: string | null): string {
   return `${Math.floor(diff / 3600)}h`
 }
 
-export function KitchenBoard({ restaurantId, initialOrders }: Props) {
+export function KitchenBoard({ restaurantId, initialOrders, tablesMap }: Props) {
   const { orders } = useRealtimeOrders(restaurantId, initialOrders)
 
   const received = orders.filter((o) => o.status === 'received')
@@ -79,9 +82,17 @@ export function KitchenBoard({ restaurantId, initialOrders }: Props) {
             >
               {/* Header de la orden */}
               <div className="flex items-center justify-between">
-                <span className="font-bold text-sm text-white">
-                  #{order.id.slice(-4).toUpperCase()}
-                </span>
+                <div>
+                  <span className="font-bold text-base text-white">
+                    {(() => {
+                      const t = order.table_id ? tablesMap[order.table_id] : null
+                      return t?.label ?? (t ? `Mesa ${t.number}` : 'Mesa ?')
+                    })()}
+                  </span>
+                  <span className="ml-2 text-xs text-zinc-500 font-mono">
+                    #{order.id.slice(-4).toUpperCase()}
+                  </span>
+                </div>
                 <div className="flex items-center gap-1 text-zinc-400 text-xs">
                   <Clock className="w-3 h-3" />
                   {timeAgo(order.created_at)}

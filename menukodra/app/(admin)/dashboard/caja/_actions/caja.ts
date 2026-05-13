@@ -47,7 +47,7 @@ export async function closeSession(
       amount,
       tip,
       method: paymentMethod,
-      status: 'paid',
+      status: 'completed',
       paid_at: new Date().toISOString(),
     })
 

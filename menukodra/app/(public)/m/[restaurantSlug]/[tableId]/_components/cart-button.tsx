@@ -6,20 +6,22 @@ import { useCartStore } from '@/stores/cart-store'
 
 export function CartButton() {
   const [mounted, setMounted] = useState(false)
-  const itemCount = useCartStore((s) => s.itemCount)
-  const total = useCartStore((s) => s.total)
+  const items = useCartStore((s) => s.items)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  if (!mounted || itemCount() === 0) return null
+  const itemCount = items.reduce((acc, i) => acc + i.quantity, 0)
+  const total = items.reduce((acc, i) => acc + i.subtotal, 0)
+
+  if (!mounted || itemCount === 0) return null
 
   const formattedTotal = new Intl.NumberFormat('es-MX', {
     style: 'currency',
     currency: 'MXN',
     minimumFractionDigits: 0,
-  }).format(total())
+  }).format(total)
 
   return (
     <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
@@ -30,7 +32,7 @@ export function CartButton() {
         <div className="relative">
           <ShoppingCart className="w-5 h-5" />
           <span className="absolute -top-2 -right-2 bg-white text-zinc-900 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-            {itemCount()}
+            {itemCount}
           </span>
         </div>
         <span className="flex-1 font-medium text-sm text-left">Ver carrito</span>
