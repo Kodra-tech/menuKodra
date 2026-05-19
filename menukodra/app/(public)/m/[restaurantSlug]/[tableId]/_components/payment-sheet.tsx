@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { requestBill, getSessionTotal } from '../_actions/session'
+import { requestBill, getSessionSummary, type SessionSummaryItem } from '../_actions/session'
 
 type PaymentMethod = 'cash' | 'card_terminal' | 'stripe' | 'mercadopago'
 
@@ -44,6 +44,7 @@ export function PaymentSheet({
   onStatusChange,
 }: Props) {
   const [open, setOpen] = useState(false)
+  const [items, setItems] = useState<SessionSummaryItem[]>([])
   const [total, setTotal] = useState<number | null>(null)
   const [loadingTotal, setLoadingTotal] = useState(false)
   const [tipOption, setTipOption] = useState<number>(0.1)
@@ -54,7 +55,8 @@ export function PaymentSheet({
   useEffect(() => {
     if (!open) return
     setLoadingTotal(true)
-    getSessionTotal(sessionId).then((t) => {
+    getSessionSummary(sessionId).then(({ items: i, total: t }) => {
+      setItems(i)
       setTotal(t)
       setLoadingTotal(false)
     })
@@ -160,18 +162,39 @@ export function PaymentSheet({
           </div>
         ) : (
           <div className="space-y-5">
-            {/* Totales */}
-            <div className="bg-zinc-50 rounded-xl p-4 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-zinc-500">Subtotal consumo</span>
-                <span className="font-medium">{fmt(total ?? 0)}</span>
+            {/* Desglose de consumo */}
+            <div className="bg-zinc-50 dark:bg-zinc-900 rounded-xl p-4 space-y-2">
+              {/* Lista de platillos */}
+              {items.length > 0 ? (
+                <div className="space-y-1.5 mb-3">
+                  <p className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wide mb-2">
+                    Lo que consumiste
+                  </p>
+                  {items.map((item, i) => (
+                    <div key={i} className="flex justify-between items-baseline text-sm">
+                      <span className="text-zinc-700 dark:text-zinc-300 flex-1 min-w-0 pr-2">
+                        <span className="font-medium">{item.quantity}×</span> {item.name}
+                      </span>
+                      <span className="text-zinc-600 dark:text-zinc-400 font-medium shrink-0 tabular-nums">
+                        {fmt(item.subtotal)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+
+              <Separator className="dark:bg-zinc-800" />
+
+              <div className="flex justify-between text-sm pt-1">
+                <span className="text-zinc-500 dark:text-zinc-400">Subtotal</span>
+                <span className="font-medium dark:text-zinc-200">{fmt(total ?? 0)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-zinc-500">Propina</span>
-                <span className="font-medium">{fmt(tipAmount)}</span>
+                <span className="text-zinc-500 dark:text-zinc-400">Propina</span>
+                <span className="font-medium dark:text-zinc-200">{fmt(tipAmount)}</span>
               </div>
-              <Separator />
-              <div className="flex justify-between font-bold text-base">
+              <Separator className="dark:bg-zinc-800" />
+              <div className="flex justify-between font-bold text-base dark:text-zinc-100">
                 <span>Total</span>
                 <span>{fmt(grandTotal)}</span>
               </div>

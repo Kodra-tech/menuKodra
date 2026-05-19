@@ -32,6 +32,40 @@ export async function getSessionTotal(sessionId: string): Promise<number> {
   }
 }
 
+export type SessionSummaryItem = {
+  name: string
+  quantity: number
+  unitPrice: number
+  subtotal: number
+}
+
+export async function getSessionSummary(
+  sessionId: string,
+): Promise<{ items: SessionSummaryItem[]; total: number }> {
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('orders')
+      .select('total, order_items(name_snapshot, quantity, price_snapshot, subtotal)')
+      .eq('session_id', sessionId)
+      .neq('status', 'cancelled')
+
+    const items: SessionSummaryItem[] = (data ?? []).flatMap((order) =>
+      (order.order_items ?? []).map((item) => ({
+        name: item.name_snapshot,
+        quantity: item.quantity,
+        unitPrice: item.price_snapshot ?? 0,
+        subtotal: item.subtotal ?? 0,
+      })),
+    )
+
+    const total = (data ?? []).reduce((acc, o) => acc + (o.total ?? 0), 0)
+    return { items, total }
+  } catch {
+    return { items: [], total: 0 }
+  }
+}
+
 export async function requestBill(
   sessionId: string,
 ): Promise<{ success: boolean; error?: string }> {
