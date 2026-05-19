@@ -2,6 +2,21 @@
 
 import { createClient } from '@/lib/supabase/server'
 
+export async function getSessionOrders(sessionId: string) {
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('orders')
+      .select('id, status, created_at, subtotal, order_items(id, name_snapshot, quantity)')
+      .eq('session_id', sessionId)
+      .neq('status', 'cancelled')
+      .order('created_at', { ascending: true })
+    return data ?? []
+  } catch {
+    return []
+  }
+}
+
 export async function getSessionTotal(sessionId: string): Promise<number> {
   try {
     const supabase = await createClient()
@@ -14,6 +29,40 @@ export async function getSessionTotal(sessionId: string): Promise<number> {
     return (data ?? []).reduce((acc, o) => acc + (o.total ?? 0), 0)
   } catch {
     return 0
+  }
+}
+
+export type SessionSummaryItem = {
+  name: string
+  quantity: number
+  unitPrice: number
+  subtotal: number
+}
+
+export async function getSessionSummary(
+  sessionId: string,
+): Promise<{ items: SessionSummaryItem[]; total: number }> {
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('orders')
+      .select('total, order_items(name_snapshot, quantity, price_snapshot, subtotal)')
+      .eq('session_id', sessionId)
+      .neq('status', 'cancelled')
+
+    const items: SessionSummaryItem[] = (data ?? []).flatMap((order) =>
+      (order.order_items ?? []).map((item) => ({
+        name: item.name_snapshot,
+        quantity: item.quantity,
+        unitPrice: item.price_snapshot ?? 0,
+        subtotal: item.subtotal ?? 0,
+      })),
+    )
+
+    const total = (data ?? []).reduce((acc, o) => acc + (o.total ?? 0), 0)
+    return { items, total }
+  } catch {
+    return { items: [], total: 0 }
   }
 }
 

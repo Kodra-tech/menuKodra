@@ -31,7 +31,7 @@ export default async function MenuLayout({ children, params }: Props) {
 
   return (
     <div
-      className="min-h-screen bg-zinc-50"
+      className="min-h-screen bg-zinc-50 dark:bg-zinc-950"
       style={{ '--color-brand': primaryColor } as React.CSSProperties}
     >
       {children}

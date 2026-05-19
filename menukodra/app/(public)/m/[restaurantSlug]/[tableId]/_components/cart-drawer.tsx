@@ -47,7 +47,7 @@ export function CartDrawer({ sessionId, restaurantId, tableId }: Props) {
     if (result.success) {
       clearItems()
       setOpen(false)
-      toast.success('¡Orden enviada a cocina! 🍳')
+      toast.success('Orden enviada a cocina')
     } else {
       toast.error(result.error)
     }
@@ -85,14 +85,14 @@ export function CartDrawer({ sessionId, restaurantId, tableId }: Props) {
                   <div className="flex flex-col items-center gap-1">
                     <button
                       onClick={() => incrementItem(item.cartId)}
-                      className="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
+                      className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-950 dark:border dark:border-zinc-600 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-900 transition-colors text-zinc-900 dark:text-white"
                     >
                       <Plus className="w-3.5 h-3.5" />
                     </button>
                     <span className="text-sm font-semibold w-7 text-center">{item.quantity}</span>
                     <button
                       onClick={() => decrementItem(item.cartId)}
-                      className="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center hover:bg-zinc-200 transition-colors"
+                      className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-950 dark:border dark:border-zinc-600 flex items-center justify-center hover:bg-zinc-200 dark:hover:bg-zinc-900 transition-colors text-zinc-900 dark:text-white"
                     >
                       <Minus className="w-3.5 h-3.5" />
                     </button>
