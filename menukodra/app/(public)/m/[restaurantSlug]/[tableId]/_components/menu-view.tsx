@@ -120,6 +120,8 @@ export function MenuView({ restaurant, table, sessionId, sessionStatus, categori
           sessionId={sessionId}
           restaurantId={restaurant.id}
           tableId={table.id}
+          restaurantSlug={restaurant.slug}
+          tableLabel={tableLabel}
           sessionStatus={sessionStatus}
         />
       </main>

@@ -2,6 +2,21 @@
 
 import { createClient } from '@/lib/supabase/server'
 
+export async function getSessionTotal(sessionId: string): Promise<number> {
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('orders')
+      .select('total')
+      .eq('session_id', sessionId)
+      .neq('status', 'cancelled')
+
+    return (data ?? []).reduce((acc, o) => acc + (o.total ?? 0), 0)
+  } catch {
+    return 0
+  }
+}
+
 export async function requestBill(
   sessionId: string,
 ): Promise<{ success: boolean; error?: string }> {

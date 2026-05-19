@@ -1,15 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { BellRing, CheckCircle, Receipt } from 'lucide-react'
+import { BellRing, CheckCircle } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { requestBill, callWaiter } from '../_actions/session'
+import { PaymentSheet } from './payment-sheet'
+import { callWaiter } from '../_actions/session'
 
 interface Props {
   sessionId: string
   restaurantId: string
   tableId: string
+  restaurantSlug: string
+  tableLabel: string
   sessionStatus: string
 }
 
@@ -17,23 +20,12 @@ export function SessionActions({
   sessionId,
   restaurantId,
   tableId,
+  restaurantSlug,
+  tableLabel,
   sessionStatus: initialStatus,
 }: Props) {
   const [status, setStatus] = useState(initialStatus)
-  const [requestingBill, setRequestingBill] = useState(false)
   const [callingWaiter, setCallingWaiter] = useState(false)
-
-  async function handleRequestBill() {
-    setRequestingBill(true)
-    const result = await requestBill(sessionId)
-    if (result.success) {
-      setStatus('paying')
-      toast.success('Cuenta solicitada. Un mesero pasará en breve.')
-    } else {
-      toast.error(result.error ?? 'Error al solicitar la cuenta')
-      setRequestingBill(false)
-    }
-  }
 
   async function handleCallWaiter() {
     setCallingWaiter(true)
@@ -56,15 +48,14 @@ export function SessionActions({
           </span>
         </div>
       ) : (
-        <Button
-          variant="outline"
-          className="w-full h-11"
-          disabled={requestingBill}
-          onClick={handleRequestBill}
-        >
-          <Receipt className="w-4 h-4 mr-2" />
-          Solicitar la cuenta
-        </Button>
+        <PaymentSheet
+          sessionId={sessionId}
+          restaurantId={restaurantId}
+          tableId={tableId}
+          restaurantSlug={restaurantSlug}
+          tableLabel={tableLabel}
+          onStatusChange={setStatus}
+        />
       )}
 
       <Button

@@ -270,15 +270,15 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ## 🚀 Roadmap por Sprints
 
 ### Sprint 0 — Setup (1-2 días)
-- [ ] `npx create-next-app@latest menu-digital --typescript --tailwind --app`
-- [ ] Crear proyecto en Supabase
-- [ ] Configurar `.env.local`
-- [ ] Instalar dependencias base
-- [ ] Configurar shadcn/ui (`npx shadcn@latest init`)
-- [ ] Setup ESLint + Prettier
-- [ ] Subir a GitHub + conectar Vercel
-- [ ] Correr migraciones SQL (schema completo arriba)
-- [ ] Configurar RLS básico
+- [x] `npx create-next-app@latest menu-digital --typescript --tailwind --app`
+- [x] Crear proyecto en Supabase
+- [x] Configurar `.env.local`
+- [x] Instalar dependencias base
+- [x] Configurar shadcn/ui (`npx shadcn@latest init`)
+- [x] Setup ESLint + Prettier
+- [x] Subir a GitHub + conectar Vercel
+- [x] Correr migraciones SQL (schema completo arriba)
+- [x] Configurar RLS básico
 
 **Entregable:** Proyecto deployado mostrando "Hello World" en Vercel.
 
@@ -287,16 +287,16 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ### Sprint 1 — MVP Cliente (5-7 días)
 **Objetivo:** Un cliente puede escanear QR, ver menú, agregar platillos al carrito, y enviar orden a cocina.
 
-- [ ] Ruta `/m/[slug]/[tableId]` que valida que mesa exista
-- [ ] Crear/recuperar `table_session` activa
-- [ ] Componente `MenuCategory` con tabs/scroll
-- [ ] Componente `ItemCard` con imagen, nombre, precio
-- [ ] Modal `ItemDetail` con modificadores e instrucciones
-- [ ] Carrito flotante con Zustand
-- [ ] Botón "Ordenar" → crea `order` + `order_items` en DB
-- [ ] Vista de cocina simple: lista de órdenes en estado `received`/`preparing`
-- [ ] Realtime: la cocina ve nuevas órdenes sin refresh
-- [ ] Botón en cocina: "Marcar listo" → notifica al cliente
+- [x] Ruta `/m/[slug]/[tableId]` que valida que mesa exista
+- [x] Crear/recuperar `table_session` activa
+- [x] Componente `MenuCategory` con tabs/scroll
+- [x] Componente `ItemCard` con imagen, nombre, precio
+- [x] Modal `ItemDetail` con modificadores e instrucciones
+- [x] Carrito flotante con Zustand
+- [x] Botón "Ordenar" → crea `order` + `order_items` en DB
+- [x] Vista de cocina simple: lista de órdenes en estado `received`/`preparing`
+- [x] Realtime: la cocina ve nuevas órdenes sin refresh
+- [x] Botón en cocina: "Marcar listo" → notifica al cliente
 
 **Entregable:** Demo funcional end-to-end con datos seed.
 
@@ -305,40 +305,40 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ### Sprint 2 — Panel Admin (5-7 días)
 **Objetivo:** El restaurante puede gestionar su menú sin desarrollador.
 
-- [ ] Auth con Supabase (login/logout, magic link)
-- [ ] Layout dashboard con sidebar
-- [ ] CRUD de categorías
-- [ ] CRUD de platillos con upload de imagen (Supabase Storage)
-- [ ] CRUD de modificadores
-- [ ] Toggle "agotado" rápido por platillo
-- [ ] CRUD de mesas + generación de QR descargable (PNG/PDF)
-- [ ] Configuración del restaurante (nombre, logo, colores)
+- [x] Auth con Supabase (login/logout, magic link)
+- [x] Layout dashboard con sidebar
+- [x] CRUD de categorías
+- [x] CRUD de platillos con upload de imagen (Supabase Storage)
+- [x] CRUD de modificadores
+- [x] Toggle "agotado" rápido por platillo
+- [x] CRUD de mesas + generación de QR descargable (PNG/PDF)
+- [x] Configuración del restaurante (nombre, logo, colores)
 
 **Entregable:** Restaurante puede dar de alta su menú completo sin tocar código.
 
 ---
 
 ### Sprint 3 — Caja y Cierre de Mesa (4-5 días)
-- [ ] Vista caja: ver mesas activas con totales
-- [ ] Detalle de cuenta por mesa
-- [ ] Cobro en efectivo/terminal (manual)
-- [ ] Marcar `table_session` como `closed`
-- [ ] Reset automático: nueva sesión al escanear QR de mesa cerrada
-- [ ] Vista cliente "Solicitar cuenta" (pasa la sesión a `paying`)
-- [ ] Botón "Llamar al mesero" → notificación en panel
+- [x] Vista caja: ver mesas activas con totales
+- [x] Detalle de cuenta por mesa
+- [x] Cobro en efectivo/terminal (manual)
+- [x] Marcar `table_session` como `closed`
+- [x] Reset automático: nueva sesión al escanear QR de mesa cerrada
+- [x] Vista cliente "Solicitar cuenta" (pasa la sesión a `paying`)
+- [x] Botón "Llamar al mesero" → notificación en panel
 
 **Entregable:** Ciclo completo: cliente ordena → cocina prepara → caja cobra → mesa lista para siguiente cliente.
 
 ---
 
 ### Sprint 4 — Pago en Línea (5-7 días)
-- [ ] Integración Stripe Checkout
-- [ ] Integración MercadoPago Checkout Pro
-- [ ] Webhook handlers (con verificación de firma)
-- [ ] Selector de método de pago en cliente
-- [ ] Cálculo y selector de propina (10/15/20% / custom)
-- [ ] Pantalla de confirmación post-pago
-- [ ] Email/SMS de recibo (Resend)
+- [ ] Integración Stripe Checkout *(pendiente — se integrará según método de pago del cliente)*
+- [x] Integración MercadoPago Checkout Pro
+- [x] Webhook handlers (con verificación de firma)
+- [x] Selector de método de pago en cliente
+- [x] Cálculo y selector de propina (Sin propina / 10% / 15% / 20%)
+- [x] Pantalla de confirmación post-pago
+- [x] Email/SMS de recibo (Resend)
 
 **Entregable:** Cliente puede pagar sin pasar a caja.
 
