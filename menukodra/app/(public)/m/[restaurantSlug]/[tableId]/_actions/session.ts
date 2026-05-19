@@ -2,6 +2,21 @@
 
 import { createClient } from '@/lib/supabase/server'
 
+export async function getSessionOrders(sessionId: string) {
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('orders')
+      .select('id, status, created_at, subtotal, order_items(id, name_snapshot, quantity)')
+      .eq('session_id', sessionId)
+      .neq('status', 'cancelled')
+      .order('created_at', { ascending: true })
+    return data ?? []
+  } catch {
+    return []
+  }
+}
+
 export async function getSessionTotal(sessionId: string): Promise<number> {
   try {
     const supabase = await createClient()

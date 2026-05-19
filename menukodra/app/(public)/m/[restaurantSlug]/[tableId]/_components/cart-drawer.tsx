@@ -47,7 +47,7 @@ export function CartDrawer({ sessionId, restaurantId, tableId }: Props) {
     if (result.success) {
       clearItems()
       setOpen(false)
-      toast.success('¡Orden enviada a cocina! 🍳')
+      toast.success('Orden enviada a cocina')
     } else {
       toast.error(result.error)
     }

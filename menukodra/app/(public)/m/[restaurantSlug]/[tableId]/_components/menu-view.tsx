@@ -2,11 +2,14 @@
 
 import { useEffect } from 'react'
 import Image from 'next/image'
+import { Utensils } from 'lucide-react'
 import { useCartStore } from '@/stores/cart-store'
 import { CategoryTabs } from './category-tabs'
 import { CartDrawer } from './cart-drawer'
 import { CartButton } from './cart-button'
 import { SessionActions } from './session-actions'
+import { OrderStatus } from './order-status'
+import { ThemeToggle } from './theme-toggle'
 import { Toaster } from '@/components/ui/sonner'
 
 type ModifierOption = {
@@ -77,45 +80,54 @@ export function MenuView({ restaurant, table, sessionId, sessionStatus, categori
   const initSession = useCartStore((s) => s.initSession)
 
   useEffect(() => {
-    initSession({
-      restaurantId: restaurant.id,
-      tableId: table.id,
-      sessionId,
-    })
+    initSession({ restaurantId: restaurant.id, tableId: table.id, sessionId })
   }, [restaurant.id, table.id, sessionId, initSession])
 
   const tableLabel = table.label ?? `Mesa ${table.number}`
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white border-b border-zinc-200 shadow-sm">
+      <header className="sticky top-0 z-40 bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 shadow-sm">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
+          {/* Logo */}
           {restaurant.logo_url ? (
             <Image
               src={restaurant.logo_url}
               alt={restaurant.name}
               width={40}
               height={40}
-              className="rounded-full object-cover"
+              className="rounded-full object-cover shrink-0"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-zinc-100 flex items-center justify-center text-sm font-bold text-zinc-500">
-              {restaurant.name.charAt(0)}
+            <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
+              <Utensils className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />
             </div>
           )}
-          <div>
-            <h1 className="font-semibold text-zinc-900 text-base leading-tight">
+
+          {/* Restaurant info */}
+          <div className="flex-1 min-w-0">
+            <h1
+              className="font-bold text-zinc-900 dark:text-zinc-100 text-base leading-tight truncate"
+              style={{ fontFamily: 'var(--font-playfair), var(--font-karla), serif' }}
+            >
               {restaurant.name}
             </h1>
-            <p className="text-xs text-zinc-500">{tableLabel}</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">{tableLabel}</p>
           </div>
+
+          {/* Dark mode toggle */}
+          <ThemeToggle />
         </div>
       </header>
 
-      {/* Contenido principal */}
-      <main className="flex-1 max-w-2xl mx-auto w-full pb-28">
+      {/* Main content */}
+      <main className="flex-1 max-w-2xl mx-auto w-full pb-32">
+        {/* Order status tracker — realtime */}
+        <OrderStatus sessionId={sessionId} />
+
         <CategoryTabs categories={categories} currency={restaurant.currency ?? 'MXN'} />
+
         <SessionActions
           sessionId={sessionId}
           restaurantId={restaurant.id}
@@ -126,7 +138,7 @@ export function MenuView({ restaurant, table, sessionId, sessionStatus, categori
         />
       </main>
 
-      {/* Carrito flotante */}
+      {/* Floating cart */}
       <CartDrawer sessionId={sessionId} restaurantId={restaurant.id} tableId={table.id} />
       <CartButton />
       <Toaster position="top-center" richColors />
