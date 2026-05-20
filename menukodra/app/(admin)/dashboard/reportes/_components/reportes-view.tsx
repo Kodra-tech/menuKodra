@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from 'react'
 import { Download, FileText, TrendingUp, Receipt, Users, Banknote } from 'lucide-react'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
@@ -38,6 +37,93 @@ const fmt = (n: number) =>
 const fmtDate = (iso: string) => {
   const [y, m, d] = iso.split('-')
   return `${d}/${m}/${y}`
+}
+
+function fmtMXN(n: number) {
+  return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(n)
+}
+
+function exportPDF(
+  summary: ReporteSummary,
+  daily: DailySales[],
+  topItems: TopItem[],
+  range: string,
+) {
+  const win = window.open('', '_blank')
+  if (!win) return
+
+  const dailyRows = daily
+    .map(
+      (r) => `
+    <tr>
+      <td>${fmtDate(r.date)}</td>
+      <td class="r">${r.sesiones}</td>
+      <td class="r">${fmtMXN(r.ventas)}</td>
+      <td class="r">${fmtMXN(r.propina)}</td>
+      <td class="r b">${fmtMXN(r.ventas + r.propina)}</td>
+    </tr>`,
+    )
+    .join('')
+
+  const itemRows = topItems
+    .map(
+      (item, i) => `
+    <tr>
+      <td class="r dim">${i + 1}</td>
+      <td>${item.name}</td>
+      <td class="r">${item.qty}</td>
+      <td class="r b">${fmtMXN(item.revenue)}</td>
+    </tr>`,
+    )
+    .join('')
+
+  win.document.write(`<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte — ${range}</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#111;padding:28px 32px}
+  h1{font-size:18px;font-weight:700;margin-bottom:3px}
+  h2{font-size:13px;font-weight:700;margin:22px 0 8px;color:#333}
+  .meta{font-size:11px;color:#888;margin-bottom:22px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:26px}
+  .kpi{border:1px solid #ddd;border-radius:8px;padding:12px 14px}
+  .kpi-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.05em}
+  .kpi-value{font-size:17px;font-weight:700;margin-top:5px}
+  table{width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:8px}
+  th{background:#f5f5f5;padding:7px 10px;text-align:left;border-bottom:2px solid #ccc;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  td{padding:6px 10px;border-bottom:1px solid #eee}
+  .r{text-align:right}
+  .b{font-weight:700}
+  .dim{color:#aaa}
+  @media print{body{padding:12px 16px}}
+</style>
+</head>
+<body>
+  <h1>Reporte de ventas — ${range}</h1>
+  <p class="meta">Generado el ${new Date().toLocaleDateString('es-MX', { dateStyle: 'long' })}</p>
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-label">Ventas totales</div><div class="kpi-value">${fmtMXN(summary.totalVentas)}</div></div>
+    <div class="kpi"><div class="kpi-label">Propina total</div><div class="kpi-value">${fmtMXN(summary.totalPropina)}</div></div>
+    <div class="kpi"><div class="kpi-label">Ticket promedio</div><div class="kpi-value">${fmtMXN(summary.ticketPromedio)}</div></div>
+    <div class="kpi"><div class="kpi-label">Sesiones</div><div class="kpi-value">${summary.totalSesiones}</div></div>
+  </div>
+  <h2>Ventas por día</h2>
+  <table>
+    <thead><tr><th>Fecha</th><th class="r">Sesiones</th><th class="r">Ventas</th><th class="r">Propina</th><th class="r">Total</th></tr></thead>
+    <tbody>${dailyRows}</tbody>
+  </table>
+  <h2>Top 10 platillos</h2>
+  <table>
+    <thead><tr><th class="r">#</th><th>Platillo</th><th class="r">Cantidad</th><th class="r">Ingresos</th></tr></thead>
+    <tbody>${itemRows}</tbody>
+  </table>
+  <script>window.onload = function(){ window.print() }<\/script>
+</body>
+</html>`)
+  win.document.close()
 }
 
 function exportCSV(daily: DailySales[], topItems: TopItem[], range: string) {
@@ -118,10 +204,7 @@ export function ReportesView({ initialSummary, initialDaily, initialTopItems }: 
           <Button
             variant="outline"
             size="sm"
-            onClick={() => {
-              toast.info('Se abrirá el diálogo de impresión. Elige "Guardar como PDF".')
-              setTimeout(() => window.print(), 300)
-            }}
+            onClick={() => exportPDF(summary, daily, topItems, rangeLabel)}
             className="gap-2"
           >
             <FileText className="w-4 h-4" />
