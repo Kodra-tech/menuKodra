@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Karla, Playfair_Display } from 'next/font/google'
-import { Providers } from '@/app/providers'
 import './globals.css'
 
 const karla = Karla({
@@ -33,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className="min-h-full flex flex-col"
         style={{ fontFamily: 'var(--font-karla), system-ui, sans-serif' }}
       >
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   )

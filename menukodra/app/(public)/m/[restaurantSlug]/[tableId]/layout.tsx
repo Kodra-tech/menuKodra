@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { Providers } from '@/app/providers'
 
 interface Props {
   children: React.ReactNode
@@ -30,11 +31,13 @@ export default async function MenuLayout({ children, params }: Props) {
   const primaryColor = restaurant.primary_color ?? '#000000'
 
   return (
-    <div
-      className="min-h-screen bg-zinc-50 dark:bg-zinc-950"
-      style={{ '--color-brand': primaryColor } as React.CSSProperties}
-    >
-      {children}
-    </div>
+    <Providers>
+      <div
+        className="min-h-screen bg-zinc-50 dark:bg-zinc-950"
+        style={{ '--color-brand': primaryColor } as React.CSSProperties}
+      >
+        {children}
+      </div>
+    </Providers>
   )
 }

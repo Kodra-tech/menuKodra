@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { Sidebar } from './_components/sidebar'
+import { Toaster } from '@/components/ui/sonner'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -17,7 +18,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .eq('id', user.id)
     .single()
 
-  if (!staff?.restaurant_id) redirect('/login')
+  // Autenticado pero sin restaurante → onboarding
+  if (!staff?.restaurant_id) redirect('/onboarding')
 
   const restaurant = staff.restaurants as { id: string; name: string } | null
   const restaurantName = restaurant?.name ?? 'Restaurante'
@@ -26,6 +28,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <div className="flex h-screen overflow-hidden bg-zinc-50">
       <Sidebar restaurantName={restaurantName} userEmail={user.email ?? ''} />
       <main className="flex-1 overflow-y-auto">{children}</main>
+      <Toaster position="top-center" richColors />
     </div>
   )
 }
