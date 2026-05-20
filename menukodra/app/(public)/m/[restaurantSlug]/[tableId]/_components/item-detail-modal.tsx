@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Minus, Plus } from 'lucide-react'
+import { Minus, Plus, Utensils } from 'lucide-react'
 import { toast } from 'sonner'
 import {
   Dialog,
@@ -129,7 +129,7 @@ export function ItemDetailModal({ item, currency, open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto p-0 gap-0">
+      <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto p-0 gap-0 dark:bg-zinc-900 dark:border-zinc-800">
         {/* Imagen del item */}
         {item.image_url ? (
           <div className="relative w-full h-48">
@@ -142,18 +142,18 @@ export function ItemDetailModal({ item, currency, open, onOpenChange }: Props) {
             />
           </div>
         ) : (
-          <div className="w-full h-32 bg-zinc-100 flex items-center justify-center text-5xl">
-            🍽️
+          <div className="w-full h-32 bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+            <Utensils className="w-12 h-12 text-zinc-300 dark:text-zinc-600" />
           </div>
         )}
 
         <div className="p-5 space-y-4">
           <DialogHeader>
-            <DialogTitle className="text-xl font-semibold text-zinc-900">
+            <DialogTitle className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
               {item.name}
             </DialogTitle>
             {item.description && (
-              <p className="text-sm text-zinc-500 mt-1">{item.description}</p>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">{item.description}</p>
             )}
           </DialogHeader>
 
@@ -168,9 +168,9 @@ export function ItemDetailModal({ item, currency, open, onOpenChange }: Props) {
               <div key={group.id}>
                 <Separator className="mb-3" />
                 <div className="flex items-center gap-2 mb-2">
-                  <h4 className="font-medium text-sm text-zinc-900">{group.name}</h4>
+                  <h4 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{group.name}</h4>
                   {group.is_required && (
-                    <span className="text-[10px] bg-zinc-900 text-white px-1.5 py-0.5 rounded-full">
+                    <span className="text-[10px] bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-1.5 py-0.5 rounded-full">
                       Requerido
                     </span>
                   )}
@@ -193,8 +193,8 @@ export function ItemDetailModal({ item, currency, open, onOpenChange }: Props) {
                         className={cn(
                           'w-full flex items-center justify-between px-3 py-2 rounded-lg border text-sm transition-colors',
                           isSelected
-                            ? 'border-zinc-900 bg-zinc-50 font-medium'
-                            : 'border-zinc-200 hover:border-zinc-400',
+                            ? 'border-zinc-900 bg-zinc-50 font-medium dark:border-zinc-100 dark:bg-zinc-800 dark:text-zinc-100'
+                            : 'border-zinc-200 hover:border-zinc-400 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500',
                         )}
                       >
                         <div className="flex items-center gap-2">
@@ -202,13 +202,15 @@ export function ItemDetailModal({ item, currency, open, onOpenChange }: Props) {
                             className={cn(
                               'w-4 h-4 border-2 flex-shrink-0 transition-colors',
                               isMultiple ? 'rounded-sm' : 'rounded-full',
-                              isSelected ? 'bg-zinc-900 border-zinc-900' : 'border-zinc-300',
+                              isSelected
+                                ? 'bg-zinc-900 border-zinc-900 dark:bg-zinc-100 dark:border-zinc-100'
+                                : 'border-zinc-300 dark:border-zinc-600',
                             )}
                           />
                           {opt.name}
                         </div>
                         {opt.price_delta !== null && opt.price_delta !== 0 && (
-                          <span className="text-zinc-500 text-xs">
+                          <span className="text-zinc-500 dark:text-zinc-400 text-xs">
                             +{formatPrice(opt.price_delta)}
                           </span>
                         )}
@@ -223,31 +225,31 @@ export function ItemDetailModal({ item, currency, open, onOpenChange }: Props) {
           {/* Instrucciones especiales */}
           <Separator />
           <div>
-            <label className="text-sm font-medium text-zinc-900 mb-1.5 block">
+            <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-1.5 block">
               Instrucciones especiales
             </label>
             <Textarea
               placeholder="Sin cebolla, extra salsa... (opcional)"
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
-              className="text-sm resize-none"
+              className="text-sm resize-none dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-100 dark:placeholder-zinc-500"
               rows={2}
             />
           </div>
 
           {/* Cantidad y agregar */}
           <div className="flex items-center gap-3 pt-1">
-            <div className="flex items-center gap-2 border border-zinc-200 rounded-lg p-1">
+            <div className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-700 rounded-lg p-1">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-8 h-8 rounded-md flex items-center justify-center hover:bg-zinc-100 transition-colors"
+                className="w-8 h-8 rounded-md flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-100 transition-colors"
               >
                 <Minus className="w-4 h-4" />
               </button>
-              <span className="w-6 text-center font-medium text-sm">{quantity}</span>
+              <span className="w-6 text-center font-medium text-sm dark:text-zinc-100">{quantity}</span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-8 h-8 rounded-md flex items-center justify-center hover:bg-zinc-100 transition-colors"
+                className="w-8 h-8 rounded-md flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-100 transition-colors"
               >
                 <Plus className="w-4 h-4" />
               </button>

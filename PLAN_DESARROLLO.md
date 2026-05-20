@@ -345,14 +345,14 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ---
 
 ### Sprint 5 — Refinamiento UX (4-5 días)
-- [ ] Estado del pedido visible al cliente (recibido → preparando → listo)
+- [x] Estado del pedido visible al cliente (recibido → preparando → listo)
 - [ ] Multi-idioma (next-intl): español/inglés
-- [ ] Tags y alérgenos visibles en cards
-- [ ] Filtros: vegetariano, sin gluten, etc.
-- [ ] Skeletons / loading states
-- [ ] PWA (manifest + service worker básico)
-- [ ] Optimización de imágenes (next/image + Supabase transform)
-- [ ] Modo oscuro (opcional según marca del restaurante)
+- [x] Tags y alérgenos visibles en cards
+- [x] Filtros: vegetariano, sin gluten, etc.
+- [x] Skeletons / loading states
+- [x] PWA (manifest + service worker básico)
+- [ ] Optimización de imágenes (Supabase transform)
+- [x] Modo oscuro (opcional según marca del restaurante)
 
 ---
 

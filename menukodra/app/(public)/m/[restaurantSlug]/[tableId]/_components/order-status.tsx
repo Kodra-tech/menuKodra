@@ -63,10 +63,15 @@ export function OrderStatus({ sessionId }: Props) {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    getSessionOrders(sessionId).then((data) => {
+    const refresh = async () => {
+      const data = await getSessionOrders(sessionId)
       setOrders(data as Order[])
-      setLoaded(true)
-    })
+    }
+
+    refresh().then(() => setLoaded(true))
+
+    // Polling fallback: actualiza cada 20s si el realtime no está habilitado en la tabla
+    const interval = setInterval(refresh, 20_000)
 
     const supabase = createClient()
     const channel = supabase
@@ -74,14 +79,12 @@ export function OrderStatus({ sessionId }: Props) {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'orders', filter: `session_id=eq.${sessionId}` },
-        async () => {
-          const data = await getSessionOrders(sessionId)
-          setOrders(data as Order[])
-        },
+        refresh,
       )
       .subscribe()
 
     return () => {
+      clearInterval(interval)
       supabase.removeChannel(channel)
     }
   }, [sessionId])

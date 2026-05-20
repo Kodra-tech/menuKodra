@@ -100,14 +100,14 @@ export function CartDrawer({ sessionId, restaurantId, tableId }: Props) {
 
                   {/* Info del item */}
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm text-zinc-900">{item.name}</p>
+                    <p className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{item.name}</p>
                     {item.modifiers.length > 0 && (
-                      <p className="text-xs text-zinc-500 mt-0.5 line-clamp-2">
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 line-clamp-2">
                         {item.modifiers.map((m) => m.optionName).join(', ')}
                       </p>
                     )}
                     {item.specialInstructions && (
-                      <p className="text-xs text-zinc-400 mt-0.5 italic line-clamp-1">
+                      <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5 italic line-clamp-1">
                         "{item.specialInstructions}"
                       </p>
                     )}
@@ -115,7 +115,7 @@ export function CartDrawer({ sessionId, restaurantId, tableId }: Props) {
 
                   {/* Precio y eliminar */}
                   <div className="flex flex-col items-end gap-1">
-                    <span className="font-semibold text-sm text-zinc-900">
+                    <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
                       {new Intl.NumberFormat('es-MX', {
                         style: 'currency',
                         currency: 'MXN',
@@ -137,8 +137,8 @@ export function CartDrawer({ sessionId, restaurantId, tableId }: Props) {
 
             <div className="px-5 py-4 space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-zinc-600">Total del pedido</span>
-                <span className="font-bold text-lg text-zinc-900">{formattedTotal}</span>
+                <span className="text-sm text-zinc-600 dark:text-zinc-400">Total del pedido</span>
+                <span className="font-bold text-lg text-zinc-900 dark:text-zinc-100">{formattedTotal}</span>
               </div>
               <Button
                 onClick={handlePlaceOrder}
