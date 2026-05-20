@@ -18,7 +18,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .eq('id', user.id)
     .single()
 
-  if (!staff?.restaurant_id) redirect('/login')
+  // Autenticado pero sin restaurante → onboarding
+  if (!staff?.restaurant_id) redirect('/onboarding')
 
   const restaurant = staff.restaurants as { id: string; name: string } | null
   const restaurantName = restaurant?.name ?? 'Restaurante'

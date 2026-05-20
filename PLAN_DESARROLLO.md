@@ -357,13 +357,13 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ---
 
 ### Sprint 6 — Multi-tenant + Comercialización (5-7 días)
-- [ ] Onboarding de restaurante nuevo (wizard)
-- [ ] Dashboard de reportes: ventas/día, top platillos, ticket promedio
-- [ ] Exportar reportes a CSV/PDF
-- [ ] Landing comercial (`/`)
-- [ ] Página de pricing
+- [x] Onboarding de restaurante nuevo (wizard 3 pasos: datos, mesas, confirmar)
+- [x] Dashboard de reportes: ventas/día, top platillos, ticket promedio
+- [x] Exportar reportes a CSV/PDF
+- [x] Landing comercial (`/`) con hero, features, pricing y CTA
+- [x] Página de pricing (`/pricing`) con comparativa de planes
 - [ ] Demo en vivo con restaurante ficticio
-- [ ] Documentación para clientes (FAQ)
+- [x] Documentación para clientes (FAQ en `/ayuda`)
 
 ---
 
