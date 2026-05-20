@@ -128,3 +128,18 @@
     @apply font-sans;
   }
 }
+
+@media print {
+  /* Anula overflow-hidden del layout del dashboard para que imprima todo el contenido */
+  html,
+  body,
+  body > div,
+  body > div > div {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  /* Ocultar barra lateral y elementos de navegación al imprimir */
+  aside {
+    display: none !important;
+  }
+}

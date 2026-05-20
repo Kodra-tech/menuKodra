@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { Download, FileText, TrendingUp, Receipt, Users, Banknote } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
@@ -114,7 +115,15 @@ export function ReportesView({ initialSummary, initialDaily, initialTopItems }: 
             <Download className="w-4 h-4" />
             Exportar CSV
           </Button>
-          <Button variant="outline" size="sm" onClick={() => window.print()} className="gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              toast.info('Se abrirá el diálogo de impresión. Elige "Guardar como PDF".')
+              setTimeout(() => window.print(), 300)
+            }}
+            className="gap-2"
+          >
             <FileText className="w-4 h-4" />
             Exportar PDF
           </Button>
